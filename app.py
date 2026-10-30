@@ -25,8 +25,8 @@ from flask import Flask, jsonify, request, send_from_directory
 #  ملاحظة: لا تشارك هذا الملف مع أحد بعد وضع التوكن فيه.
 #  يمكنك أيضاً وضعهما كمتغيرات بيئة بنفس الاسمين بدل كتابتهما هنا.
 # ----------------------------------------------------------------------
-BOT_TOKEN = os.getenv("BOT_TOKEN", "ضع_التوكن_السري_هنا")
-CHAT_ID = os.getenv("CHAT_ID", "ضع_معرف_الدردشة_هنا")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "ضع_التوكن_السري_هنا").strip().strip("\"'")
+CHAT_ID = os.getenv("CHAT_ID", "ضع_معرف_الدردشة_هنا").strip().strip("\"'")
 # ======================================================================
 
 # الأسعار بالدينار الجزائري
@@ -83,13 +83,25 @@ def telegram_call(method, data=None, files=None):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/{method}"
     try:
         r = requests.post(url, data=data, files=files, timeout=30)
+        if not r.ok:
+            # يظهر سبب الرفض في تبويب Logs داخل Render
+            print(f"[TELEGRAM ERROR] {method} -> {r.status_code}: {r.text}", flush=True)
         return r.ok
-    except requests.RequestException:
+    except requests.RequestException as e:
+        print(f"[TELEGRAM ERROR] {method} -> connection failed: {e}", flush=True)
         return False
 
 
 def telegram_configured():
     return not (BOT_TOKEN.startswith("ضع_") or CHAT_ID.startswith("ضع_"))
+
+
+# يطبع عند التشغيل هل وصل المتغيران (دون إظهار قيمتيهما)
+print(
+    f"[STARTUP] BOT_TOKEN set: {not BOT_TOKEN.startswith('ضع_')} (len={len(BOT_TOKEN)}) | "
+    f"CHAT_ID set: {not CHAT_ID.startswith('ضع_')} (value starts with: {CHAT_ID[:4]!r})",
+    flush=True,
+)
 
 
 # ---------------------------------------------------------------- المسارات
