@@ -25,8 +25,8 @@ from flask import Flask, jsonify, request, send_from_directory
 #  ملاحظة: لا تشارك هذا الملف مع أحد بعد وضع التوكن فيه.
 #  يمكنك أيضاً وضعهما كمتغيرات بيئة بنفس الاسمين بدل كتابتهما هنا.
 # ----------------------------------------------------------------------
-BOT_TOKEN = os.getenv("BOT_TOKEN", "ضع_التوكن_السري_هنا").strip().strip("\"'")
-CHAT_ID = os.getenv("CHAT_ID", "ضع_معرف_الدردشة_هنا").strip().strip("\"'")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "9070756500:AAG2jbVNzM2rcoSnnbMXAItvGKxLhTdWeQ4").strip().strip("\"'")
+CHAT_ID = os.getenv("CHAT_ID", "9070756500").strip().strip("\"'")
 # ======================================================================
 
 # الأسعار بالدينار الجزائري
